@@ -1,5 +1,7 @@
 const math = require("mathjs");
 
+const MINIMUM_NUMBER_OF_DATA_POINTS = 2;
+
 const [THERMOMETER, HUMIDITY, MONOXIDE] = [
   "thermometer",
   "humidity",
@@ -26,7 +28,7 @@ const [
 
 const handleThermometer = (thermometerReference, data) => {
   if (data.length === 0) return NO_DATA;
-  if (data.length === 1) return NOT_ENOUGH_DATA;
+  if (data.length < MINIMUM_NUMBER_OF_DATA_POINTS) return NOT_ENOUGH_DATA;
 
   const mean = math.mean(data);
   const standardDeviation = math.std(data);
@@ -43,14 +45,14 @@ const handleThermometer = (thermometerReference, data) => {
 
 const handleHumiditySensor = (humidityReference, data) => {
   if (data.length === 0) return NO_DATA;
-  if (data.length === 1) return NOT_ENOUGH_DATA;
+  if (data.length < MINIMUM_NUMBER_OF_DATA_POINTS) return NOT_ENOUGH_DATA;
 
   return data.some((x) => math.abs(x - humidityReference) > 1) ? DISCARD : KEEP;
 };
 
 const handleMonoxideDetector = (monoxideReference, data) => {
   if (data.length === 0) return NO_DATA;
-  if (data.length === 1) return NOT_ENOUGH_DATA;
+  if (data.length < MINIMUM_NUMBER_OF_DATA_POINTS) return NOT_ENOUGH_DATA;
 
   return data.some((x) => math.abs(x - monoxideReference) > 3) ? DISCARD : KEEP;
 };
