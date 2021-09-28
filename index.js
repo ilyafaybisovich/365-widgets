@@ -1,38 +1,58 @@
 const math = require("mathjs");
 
+const [THERMOMETER, HUMIDITY, MONOXIDE] = [
+  "thermometer",
+  "humidity",
+  "monoxide",
+];
+
+const [
+  ULTRA_PRECISE,
+  VERY_PRECISE,
+  PRECISE,
+  KEEP,
+  DISCARD,
+  NOT_ENOUGH_DATA,
+  NO_DATA,
+] = [
+  "ultra precise",
+  "very precise",
+  "precise",
+  "keep",
+  "discard",
+  "not enough data",
+  "no data",
+];
+
 const handleThermometer = (thermometerReference, data) => {
-  if (data.length === 0) return "no data";
-  if (data.length === 1) return "not enough data";
+  if (data.length === 0) return NO_DATA;
+  if (data.length === 1) return NOT_ENOUGH_DATA;
 
   const mean = math.mean(data);
   const standardDeviation = math.std(data);
 
-  if (math.abs(mean - thermometerReference) < 0.5) {
+  if (math.abs(mean - thermometerReference) <= 0.5) {
     if (standardDeviation < 3) {
-      return "ultra precise";
+      return ULTRA_PRECISE;
     } else if (standardDeviation < 5) {
-      return "very precise";
+      return VERY_PRECISE;
     }
   }
-  return "precise";
+  return PRECISE;
 };
 
 const handleHumiditySensor = (humidityReference, data) => {
-  if (data.length === 0) return "no data";
-  if (data.length === 1) return "not enough data";
+  if (data.length === 0) return NO_DATA;
+  if (data.length === 1) return NOT_ENOUGH_DATA;
 
-  return data.some((x) => math.abs(x - humidityReference) > 1)
-    ? "discard"
-    : "keep";
+  return data.some((x) => math.abs(x - humidityReference) > 1) ? DISCARD : KEEP;
 };
 
 const handleMonoxideDetector = (monoxideReference, data) => {
   if (data.length === 0) return "no data";
-  if (data.length === 1) return "not enough data";
+  if (data.length === 1) return NOT_ENOUGH_DATA;
 
-  return data.some((x) => math.abs(x - monoxideReference) > 3)
-    ? "discard"
-    : "keep";
+  return data.some((x) => math.abs(x - monoxideReference) > 3) ? DISCARD : KEEP;
 };
 
 const isInstrumentNameRow = (row) => {
@@ -46,12 +66,6 @@ const isInstrumentReadingsRow = (row) => {
 const isReferenceReadingsRow = (row) => {
   return row.match(/^reference/);
 };
-
-const [THERMOMETER, HUMIDITY, MONOXIDE] = [
-  "thermometer",
-  "humidity",
-  "monoxide",
-];
 
 const evalateLogFile = (logContentStr) => {
   let instrumentsWithReadings = {};
