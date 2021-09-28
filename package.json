@@ -1,0 +1,18 @@
+{
+  "name": "thermostats",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mathjs": "^9.5.0"
+  },
+  "devDependencies": {
+    "jest": "^27.2.2",
+    "rewire": "^5.0.0"
+  }
+}
