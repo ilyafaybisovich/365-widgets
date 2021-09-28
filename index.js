@@ -57,11 +57,11 @@ const handleMonoxideDetector = (monoxideReference, data) => {
   return data.some((x) => math.abs(x - monoxideReference) > 3) ? DISCARD : KEEP;
 };
 
-const isInstrumentNameRow = (row) => {
+const isSensorNameRow = (row) => {
   return row.match(/^[a-z]+\s[a-z]+-\d*$/);
 };
 
-const isInstrumentReadingsRow = (row) => {
+const isSensorReadingsRow = (row) => {
   return row.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}\s{1}\d*\.*\d*$/);
 };
 
@@ -70,9 +70,9 @@ const isReferenceReadingsRow = (row) => {
 };
 
 const evalateLogFile = (logContentStr) => {
-  let instrumentsWithReadings = {};
+  let sensorsWithReadings = {};
   let output = {};
-  let currentInstrumentName;
+  let currentsensorName;
   let [thermometerReference, humidityReference, monoxideReference] = [, ,];
 
   const rowsOfData = logContentStr.split("\n");
@@ -85,16 +85,14 @@ const evalateLogFile = (logContentStr) => {
         humidityReference,
         monoxideReference,
       ] = row.split(" ").map(parseFloat);
-    } else if (isInstrumentReadingsRow(row)) {
-      instrumentsWithReadings[currentInstrumentName].data.push(
+    } else if (isSensorReadingsRow(row)) {
+      sensorsWithReadings[currentsensorName].data.push(
         parseFloat(row.split(" ")[1])
       );
-    } else if (isInstrumentNameRow(row)) {
-      [type, currentInstrumentName] = row.split(" ");
-      if (
-        !Object.keys(instrumentsWithReadings).includes(currentInstrumentName)
-      ) {
-        instrumentsWithReadings[currentInstrumentName] = {
+    } else if (isSensorNameRow(row)) {
+      [type, currentsensorName] = row.split(" ");
+      if (!Object.keys(sensorsWithReadings).includes(currentsensorName)) {
+        sensorsWithReadings[currentsensorName] = {
           type,
           data: [],
         };
@@ -102,17 +100,17 @@ const evalateLogFile = (logContentStr) => {
     }
   });
 
-  Object.keys(instrumentsWithReadings).forEach((instrument) => {
-    const { type, data } = instrumentsWithReadings[instrument];
+  Object.keys(sensorsWithReadings).forEach((sensor) => {
+    const { type, data } = sensorsWithReadings[sensor];
     switch (type) {
       case THERMOMETER:
-        output[instrument] = handleThermometer(thermometerReference, data);
+        output[sensor] = handleThermometer(thermometerReference, data);
         break;
       case HUMIDITY:
-        output[instrument] = handleHumiditySensor(humidityReference, data);
+        output[sensor] = handleHumiditySensor(humidityReference, data);
         break;
       case MONOXIDE:
-        output[instrument] = handleMonoxideDetector(monoxideReference, data);
+        output[sensor] = handleMonoxideDetector(monoxideReference, data);
         break;
     }
   });

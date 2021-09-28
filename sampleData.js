@@ -92,7 +92,7 @@ monoxide mon-2
 2007-04-05T22:07 8
 2007-04-05T22:08 6`;
 
-let dataWithMultipleSetsOfReadingsPerInstrument = `
+let dataWithMultipleSetsOfReadingsPerSensor = `
 reference 70.0 45.0 6
 thermometer temp-1
 2007-04-05T22:00 72.4
@@ -143,7 +143,7 @@ monoxide mon-2
 2007-04-05T22:07 8
 2007-04-05T22:08 6`;
 
-let outputForMultipleSetsOfReadingsPerInstrument = {
+let outputForMultipleSetsOfReadingsPerSensor = {
   "temp-1": "precise",
   "hum-1": "keep",
   "hum-2": "discard",
@@ -151,7 +151,7 @@ let outputForMultipleSetsOfReadingsPerInstrument = {
   "mon-2": "discard",
 };
 
-let dataWithInstrumentsWithNoData = `
+let dataWithSensorsWithNoData = `
 reference 70.0 45.0 6
 thermometer temp-1
 thermometer temp-2
@@ -175,7 +175,7 @@ monoxide mon-2
 2007-04-05T22:07 8
 2007-04-05T22:08 6`;
 
-let outputForInstrumentsWithNoData = {
+let outputForSensorsWithNoData = {
   "temp-1": "no data",
   "temp-2": "ultra precise",
   "hum-1": "no data",
@@ -183,7 +183,7 @@ let outputForInstrumentsWithNoData = {
   "mon-1": "no data",
   "mon-2": "discard",
 };
-let dataWithInstrumentsWithInsufficientData = `
+let dataWithSensorsWithInsufficientData = `
 reference 70.0 45.0 6
 thermometer temp-1
 2007-04-05T22:04 44.4
@@ -209,7 +209,7 @@ monoxide mon-2
 2007-04-05T22:07 8
 2007-04-05T22:08 6`;
 
-let outputForInstrumentsWithInsufficientData = {
+let outputForSensorsWithInsufficientData = {
   "temp-1": "not enough data",
   "temp-2": "ultra precise",
   "hum-1": "not enough data",
@@ -222,10 +222,10 @@ module.exports = {
   data,
   dataWithReferenceStringInTheMiddle,
   output,
-  dataWithMultipleSetsOfReadingsPerInstrument,
-  outputForMultipleSetsOfReadingsPerInstrument,
-  dataWithInstrumentsWithNoData,
-  outputForInstrumentsWithNoData,
-  dataWithInstrumentsWithInsufficientData,
-  outputForInstrumentsWithInsufficientData,
+  dataWithMultipleSetsOfReadingsPerSensor,
+  outputForMultipleSetsOfReadingsPerSensor,
+  dataWithSensorsWithNoData,
+  outputForSensorsWithNoData,
+  dataWithSensorsWithInsufficientData,
+  outputForSensorsWithInsufficientData,
 };

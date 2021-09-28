@@ -1,5 +1,7 @@
 This is the first iteration of the package that can take in a file with sensor readings and reference readings and classify the sensors, based on their type, into several categories according to how precise they are and whether they should be kept or discarded.
 
+The **evaluateLogFile** function specified in the solution design is exported from **index.js**.
+
 On top of that, this current version is able to handle files with some irregularities in the data – in particular, files which do not start with the row with the reference readings and have insifficient data or no data for some sensors. Specifically, any sensor with exactly 1 reading will be put in the "not enough data" category.
 
 In the future versions of this package several improvements could be made:
