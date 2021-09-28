@@ -12,7 +12,6 @@
     "mathjs": "^9.5.0"
   },
   "devDependencies": {
-    "jest": "^27.2.2",
-    "rewire": "^5.0.0"
+    "jest": "^27.2.2"
   }
 }
