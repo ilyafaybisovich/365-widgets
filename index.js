@@ -69,10 +69,10 @@ const isReferenceReadingsRow = (row) => {
   return row.match(/^reference/);
 };
 
-const evalateLogFile = (logContentStr) => {
+const evaluateLogFile = (logContentStr) => {
   let sensorsWithReadings = {};
-  let output = {};
-  let currentsensorName;
+  let result = {};
+  let currentSensorName;
   let [thermometerReference, humidityReference, monoxideReference] = [, ,];
 
   const rowsOfData = logContentStr.split("\n");
@@ -86,13 +86,13 @@ const evalateLogFile = (logContentStr) => {
         monoxideReference,
       ] = row.split(" ").map(parseFloat);
     } else if (isSensorReadingsRow(row)) {
-      sensorsWithReadings[currentsensorName].data.push(
+      sensorsWithReadings[currentSensorName].data.push(
         parseFloat(row.split(" ")[1])
       );
     } else if (isSensorNameRow(row)) {
-      [type, currentsensorName] = row.split(" ");
-      if (!Object.keys(sensorsWithReadings).includes(currentsensorName)) {
-        sensorsWithReadings[currentsensorName] = {
+      [type, currentSensorName] = row.split(" ");
+      if (!Object.keys(sensorsWithReadings).includes(currentSensorName)) {
+        sensorsWithReadings[currentSensorName] = {
           type,
           data: [],
         };
@@ -104,18 +104,18 @@ const evalateLogFile = (logContentStr) => {
     const { type, data } = sensorsWithReadings[sensor];
     switch (type) {
       case THERMOMETER:
-        output[sensor] = handleThermometer(thermometerReference, data);
+        result[sensor] = handleThermometer(thermometerReference, data);
         break;
       case HUMIDITY:
-        output[sensor] = handleHumiditySensor(humidityReference, data);
+        result[sensor] = handleHumiditySensor(humidityReference, data);
         break;
       case MONOXIDE:
-        output[sensor] = handleMonoxideDetector(monoxideReference, data);
+        result[sensor] = handleMonoxideDetector(monoxideReference, data);
         break;
     }
   });
-  console.log(output);
-  return output;
+
+  return result;
 };
 
-module.exports = evalateLogFile;
+module.exports = evaluateLogFile;
