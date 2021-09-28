@@ -49,7 +49,7 @@ const handleHumiditySensor = (humidityReference, data) => {
 };
 
 const handleMonoxideDetector = (monoxideReference, data) => {
-  if (data.length === 0) return "no data";
+  if (data.length === 0) return NO_DATA;
   if (data.length === 1) return NOT_ENOUGH_DATA;
 
   return data.some((x) => math.abs(x - monoxideReference) > 3) ? DISCARD : KEEP;
@@ -114,7 +114,7 @@ const evalateLogFile = (logContentStr) => {
         break;
     }
   });
-
+  console.log(output);
   return output;
 };
 
